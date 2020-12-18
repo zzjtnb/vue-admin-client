@@ -2,13 +2,13 @@
   <div class="login-container">
     <el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form" auto-complete="on" label-position="left">
       <div class="title-container">
-        <h1 class="title">系统登录</h1>
+        <h2 class="title">系统登录</h2>
       </div>
-      <el-form-item prop="username">
+      <el-form-item prop="loginname">
         <span class="svg-container">
           <svg-icon icon-class="user" />
         </span>
-        <el-input ref="loginname" v-model="loginForm.loginname" placeholder="Username" name="username" type="text" tabindex="1" auto-complete="on" />
+        <el-input ref="loginname" v-model="loginForm.loginname" placeholder="Username" name="loginname" type="text" tabindex="1" auto-complete="on" />
       </el-form-item>
 
       <el-form-item prop="password">
@@ -21,7 +21,7 @@
         </span>
       </el-form-item>
 
-      <el-button :loading="loading" type="primary" style="width:100%;margin-bottom:30px;" @click.native.prevent="handleLogin">Login</el-button>
+      <el-button :loading="loading" round type="primary" class="login-button" @click.native.prevent="handleLogin">登录</el-button>
 
       <div class="tips">
         <span style="padding-right:1rem">账号: admin</span>
@@ -132,12 +132,13 @@ export default {
   background: url('/images//bg/login.jpg') no-repeat center / 100% 100%;
 }
 form {
-  background: rgba(0, 0, 0, 0.2);
+  background: linear-gradient(to bottom, rgba(146, 135, 187, 0.8) 0%, rgba(0, 0, 0, 0.6) 100%);
   opacity: 0.85;
-  width: 24rem;
+  width: 26rem;
+  height: 26rem;
   z-index: 10;
   padding: 1rem;
-  border-radius: 24px;
+  border-radius: 2rem;
 }
 
 .title-container {
@@ -151,13 +152,19 @@ form {
   justify-content: center;
 }
 ::v-deep .el-input__inner {
+  font-weight: bolder;
   background: transparent;
   border-radius: 2rem;
   color: #fff;
   caret-color: #fff;
   border: 0;
 }
+::v-deep .el-form-item__error {
+  font-size: 1rem;
+  font-weight: bolder;
+}
 ::v-deep input:-webkit-autofill {
+  font-weight: bolder;
   -webkit-text-fill-color: #fff;
   transition: background-color 50000000s ease-in-out 0s;
 }
@@ -180,9 +187,18 @@ form {
   cursor: pointer;
   user-select: none;
 }
+.login-button {
+  width: 100%;
+  padding: 0.8rem 0;
+  font-size: 1rem;
+  font-weight: bolder;
+}
 .tips {
+  font-weight: bolder;
   display: flex;
   align-items: center;
   justify-content: center;
+  padding: 0.2rem;
+  margin-top: 1rem;
 }
 </style>

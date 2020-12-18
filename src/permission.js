@@ -1,27 +1,27 @@
 import router from './router'
 import store from './store'
 import { Message } from 'element-ui'
-import NProgress from 'nprogress' // progress bar
-import 'nprogress/nprogress.css' // progress bar style
-import { getToken } from '@/utils/auth' // get token from cookie
+import NProgress from 'nprogress' //进度条
+import 'nprogress/nprogress.css' // 进度条样式
+import { getToken } from '@/utils/auth' // 从cookie获取token
 import getPageTitle from '@/utils/get-page-title'
 const _import = require('./router/_import_' + process.env.NODE_ENV) // 获取组件的方法
 import Layout from "@/layout";
 NProgress.configure({ showSpinner: false }) // NProgress Configuration
-const whiteList = ['/login'] // no redirect whitelist
+const whiteList = ['/login', '/netoff'] // 没有重定向白名单
 router.beforeEach(async (to, from, next) => {
   if (window.navigator.onLine) {
-    store.dispatch('settings/ChangeNetwork', true);
-    // start progress bar
+    // if (to.path === '/netoff') {
+    //   next()//如果要去的页面是断网页面直接,放行
+    // } else {
+    //   next(`/netoff?redirect=${to.path}`)//否则跳转到断网页面
+    // }
     NProgress.start() //开启进度条
-    // set page title
     document.title = getPageTitle(to.meta.title) //设置网页标题
-    // determine whether the user has logged in
-    const hasToken = getToken() //获取cookie中的token
-    // 如果 hasToken  ！= ’‘
+    const hasToken = getToken() //确定用户是否已登录
     if (hasToken) {
       // if 去的path 是登陆页
-      if (to.path === '/login' || to.path === '/notnetwork') {
+      if (to.path === '/login' || to.path === '/netoff') {
         // if is logged in, redirect to the home page
         next({ path: '/' }) //正常执行，到 /
         NProgress.done() //关闭进度条
@@ -43,66 +43,48 @@ router.beforeEach(async (to, from, next) => {
             router.addRoutes(menus) //动态添加路由
             global.antRouter = menus //将路由数据传递给全局变量，做侧边栏渲染的工作
             // next() //正常走
-            next({ ...to, replace: true })
+            next({ ...to, replace: true }) // 如果 addRoutes并未完成,路由守卫会一层一层的执行执行,直到 addRoutes完成,找到对应的路由
           } catch (error) {
             // remove token and go to login page to re-login
-            await store.dispatch('user/resetToken') //触发vuex中  resetToken
-            // console.log(error);
+            await store.dispatch('user/resetToken') //删除token并进入登录页面重新登录
             // Message.error(error || 'Has Error') //弹出异常
             Message({ message: error, type: 'error' })
-            next(`/login?redirect=${to.path}`) //然后就执行这里 跳转到 login  redirect把从哪个页面出错的
+            next(`/login?redirect=${to.path}`) //然后就执行这里 跳转到 login,redirect把从哪个页面出错的
             NProgress.done()
           }
         }
       }
     } else {
-      /* has no token*/
       if (whiteList.indexOf(to.path) !== -1) {
-        // in the free login whitelist, go directly
-        next()
+        next() //在免登录白名单中，直接进入
       } else {
-        // other pages that do not have permission to access are redirected to the login page.
-        next(`/login?redirect=${to.path}`)
+        next(`/login?redirect=${to.path}`)  //其他无权访问的页面将重定向到登录页面。
         NProgress.done()
       }
     }
   } else {
-    /**
-      * 处理断网的情况
-      * eg:请求超时或断网时，更新state的network状态
-      * network状态在app.vue中控制着一个全局的断网提示组件的显示隐藏
-      * 关于断网组件中的刷新重新获取数据，会在断网组件中说明
-      */
-    store.dispatch('settings/ChangeNetwork', false);
-    if (to.path === '/notnetwork') {
-      next()//放行
+    if (to.path === '/netoff') {
+      next()//如果要去的页面是断网页面直接,放行
     } else {
-      next({ path: '/notnetwork' })//跳转到断网页面
+      next(`/netoff?redirect=${to.path}`)//否则跳转到断网页面
     }
   }
 })
 
 router.afterEach(() => {
-  // finish progress bar
-  NProgress.done()
+  NProgress.done()  //完成进度栏
 })
 
-
-//  遍历后台传来的路由字符串，转换为组件对象
+//遍历后台传来的路由字符串，转换为组件对象
 function filterAsyncRouter(asyncRouterMap) {
   const accessedRouters = asyncRouterMap.filter(route => {
     if (route.component) {
-      if (route.component === 'Layout') {
-        route.component = Layout
-      } else {
-        route.component = _import(route.component) // 导入组件
-      }
+      route.component = route.component === 'Layout' ? Layout : _import(route.component)
     }
     if (route.children && route.children.length) {
       route.children = filterAsyncRouter(route.children)
     }
     return true
   })
-
   return accessedRouters
 }

@@ -3,7 +3,7 @@
     <el-card>
       <Toobar :AddBtnAuth="AddBtnAuth" @handleAdd='handleAdd'></Toobar>
       <el-card style="margin-top: 10px">
-        <el-table ref="table" :data="tableData" style="width: 100%" row-key="id" lazy :load="getChildMenus" :tree-props="{children: 'children', hasChildren: 'hasChildren'}">>
+        <el-table ref="table" :data="tableData" style="width: 100%" row-key="id" lazy :load="getChildMenus" :tree-props="{children: 'children', hasChildren: 'hasChildren'}">
           <el-table-column type="index" label="#" width="55"> </el-table-column>
           <el-table-column prop="title" label="菜单标题"> </el-table-column>
           <el-table-column prop="icon" label="图标" align="center" width="50">

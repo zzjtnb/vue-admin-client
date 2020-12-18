@@ -23,7 +23,6 @@ Vue.filter('formatDate', function (value) {
 Vue.use(ElementUI, {
   size: Cookies.get('size') || 'mini' // set element-ui default size
 })
-
 Vue.directive('permission', {
   // 当被绑定的元素插入到 DOM 中时……
   inserted(el, binding, node) {

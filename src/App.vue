@@ -1,9 +1,6 @@
 <template>
   <div id="app">
     <router-view></router-view>
-    <!-- <el-scrollbar class="pagescrollbar">
-      <router-view></router-view>
-    </el-scrollbar> -->
   </div>
 </template>
 
@@ -25,5 +22,16 @@ html::-webkit-scrollbar-thumb {
   border-radius: 3px;
   background-color: #0ae;
   background-image: -webkit-gradient(linear, 0 0, 0 100%, color-stop(0.5, rgba(255, 255, 255, 0.2)), color-stop(0.5, transparent), to(transparent));
+}
+
+.el-table--scrollable-x .el-table__body-wrapper::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+.el-table--scrollable-x .el-table__body-wrapper::-webkit-scrollbar-thumb {
+  box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+}
+.el-table--scrollable-x .el-table__body-wrapper::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
 }
 </style>

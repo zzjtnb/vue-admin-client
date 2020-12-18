@@ -12,9 +12,9 @@ export const constantRoutes = [
     hidden: true
   },
   {
-    path: '/notnetwork',
-    name: 'NotNetwork',
-    component: () => import('@/components/NotNetwork/index.vue'),
+    path: '/netoff',
+    name: 'netOff',
+    component: () => import('@/components/NetOff/index.vue'),
   },
   // {
   //   path: '/',
