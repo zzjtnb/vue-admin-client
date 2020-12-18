@@ -23,6 +23,7 @@ Vue.filter('formatDate', function (value) {
 Vue.use(ElementUI, {
   size: Cookies.get('size') || 'mini' // set element-ui default size
 })
+
 Vue.directive('permission', {
   // 当被绑定的元素插入到 DOM 中时……
   inserted(el, binding, node) {
@@ -30,12 +31,14 @@ Vue.directive('permission', {
     // //使用方式： v-permission="'add'"
     if (value && value instanceof Array && value.length > 0) {
       const roles = node.child.$route.meta.roles
-      const permissionRoles = value
-      const hasPermission = roles.some(role => {
-        return permissionRoles.includes(role)
-      })
-      if (!hasPermission) {
-        el.parentNode && el.parentNode.removeChild(el)
+      if (roles) {
+        const permissionRoles = value
+        const hasPermission = roles.some(role => {
+          return permissionRoles.includes(role)
+        })
+        if (!hasPermission) {
+          el.parentNode && el.parentNode.removeChild(el)
+        }
       }
     } else {
       throw new Error(`使用方式： v-permission="['admin','editor']"`)

@@ -20,7 +20,7 @@ export default {
   components: { PanThumb },
   data() {
     return {
-      emptyGif: '/images/bg.gif',
+      emptyGif: '/images/bg/index.gif',
     };
   },
   computed: {

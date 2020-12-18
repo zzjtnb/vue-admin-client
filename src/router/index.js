@@ -11,6 +11,11 @@ export const constantRoutes = [
     component: () => import('@/views/login/index'),
     hidden: true
   },
+  {
+    path: '/notnetwork',
+    name: 'NotNetwork',
+    component: () => import('@/components/NotNetwork/index.vue'),
+  },
   // {
   //   path: '/',
   //   component: Layout,

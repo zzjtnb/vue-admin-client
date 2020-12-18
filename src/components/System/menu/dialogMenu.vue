@@ -22,7 +22,7 @@
               <el-radio-button :label="0">否</el-radio-button>
             </el-radio-group>
           </el-form-item>
-          <el-form-item label="面包屑隐藏" label-width="90px" style="margin:0 2rem;">
+          <el-form-item label="面包屑显示" label-width="90px" style="margin:0 2rem;">
             <el-radio-group v-model="formData.breadcrumb">
               <el-radio-button :label="1">是</el-radio-button>
               <el-radio-button :label="0">否</el-radio-button>

@@ -53,7 +53,12 @@
               </el-switch>
             </template>
           </el-table-column>
-          <el-table-column prop="alwaysShow" label="始终可见" align="center">
+          <el-table-column prop="alwaysShow" align="center">
+            <template slot="header" slot-scope="scope">
+              <el-tooltip class="item" effect="dark" content="路由下面的 children 声明的路由大于1个时，自动会变成嵌套的模式" placement="top">
+                <span> 始终可见</span>
+              </el-tooltip>
+            </template>
             <template slot-scope="props">
               <el-switch v-model="props.row.alwaysShow" disabled :active-value="1" active-text="是" :inactive-value="0" inactive-text="否" v-if="props.row.type == 1">
               </el-switch>

@@ -58,8 +58,8 @@ export default {
     };
     return {
       loginForm: {
-        loginname: 'admin',
-        password: '000000',
+        loginname: '',
+        password: '',
       },
       loginRules: {
         loginname: [{ required: true, trigger: 'blur', validator: validateUsername }],
@@ -156,6 +156,10 @@ form {
   color: #fff;
   caret-color: #fff;
   border: 0;
+}
+::v-deep input:-webkit-autofill {
+  -webkit-text-fill-color: #fff;
+  transition: background-color 50000000s ease-in-out 0s;
 }
 ::v-deep .el-form-item__content {
   display: flex;
