@@ -21,7 +21,7 @@ let httpCode = {
 }
 // 创建一个axios的自定义的实例service，并且可以自定义其配置
 const service = axios.create({
-  baseURL: process.env.VUE_APP_BASE_API, // url = base url + request url
+  // baseURL: process.env.VUE_APP_BASE_API, // url = base url + request url
   timeout: 5000,//请求发出的延迟毫秒数。如果请求花费的时间超过延迟的时间，那么请求会被终止
 })
 /**

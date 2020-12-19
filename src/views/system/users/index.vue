@@ -24,10 +24,10 @@
           </el-table-column>
           <el-table-column label="操作" align="center">
             <template slot-scope="scope">
-              <el-button type="warning" :disabled="info.identity != 99&&scope.row.id >=1 && scope.row.id <= 3" @click.native.prevent="showEditDialog(scope.row)">
+              <el-button type="warning" :disabled="info.identity != 99&&scope.row.id >=1 && scope.row.id <= 3" @click.native.prevent="showEditDialog(scope.row)" v-permission="['edit']">
                 编辑
               </el-button>
-              <el-button type="danger" :disabled="info.identity != 99&&scope.row.id >=1 && scope.row.id <= 3" @click.native.prevent="handleDel(scope.row)">
+              <el-button type="danger" :disabled="info.identity != 99&&scope.row.id >=1 && scope.row.id <= 3" @click.native.prevent="handleDel(scope.row)" v-permission="['delete']">
                 删除
               </el-button>
             </template>
@@ -128,7 +128,7 @@ export default {
       };
     },
     updateUser() {
-      updateUser(this.formData, this.formData.id).then((res) => {
+      updateUser(this.formData.id, this.formData).then((res) => {
         this.$notify({
           title: '成功',
           message: '修改用户成功！',

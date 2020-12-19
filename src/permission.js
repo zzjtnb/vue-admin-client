@@ -34,7 +34,8 @@ router.beforeEach(async (to, from, next) => {
           try {
             // get user info
             await store.dispatch('user/getInfo') //触发获取用户信息到接口
-            await store.dispatch('user/getRouter') //触发获取路由表的接口
+            let accessRoutes = await store.dispatch('user/getRouter') //触发获取路由表的接口
+            if (!accessRoutes) new Error('accessRoutes error!')
             if (store.getters.menus.length < 1) {
               global.antRouter = []
               next()
@@ -42,10 +43,14 @@ router.beforeEach(async (to, from, next) => {
             const menus = filterAsyncRouter(store.getters.menus) //过滤路由
             router.addRoutes(menus) //动态添加路由
             global.antRouter = menus //将路由数据传递给全局变量，做侧边栏渲染的工作
-            // next() //正常走
-            next({ ...to, replace: true }) // 如果 addRoutes并未完成,路由守卫会一层一层的执行执行,直到 addRoutes完成,找到对应的路由
+            //正常走
+            // next()
+            // 确保路由完整性,.如果 addRoutes并未完成,路由守卫会一层一层的执行执行,直到 addRoutes完成,找到对应的路由
+            next({
+              ...to,
+              replace: true//设置replace为true这样导航就不会留下历史记录
+            })
           } catch (error) {
-            // remove token and go to login page to re-login
             await store.dispatch('user/resetToken') //删除token并进入登录页面重新登录
             // Message.error(error || 'Has Error') //弹出异常
             Message({ message: error, type: 'error' })

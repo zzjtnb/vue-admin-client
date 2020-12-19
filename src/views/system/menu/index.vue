@@ -72,8 +72,8 @@
           </el-table-column>
           <el-table-column label="操作" width="150" align="center">
             <template slot-scope="props">
-              <el-button type="primary" @click="handleEdit(props.row)">编辑</el-button>
-              <el-button type="danger" :disabled="info.identity != 99&&props.row.id >=1 && props.row.id <= 18" @click="handleDelete(props.row)">删除</el-button>
+              <el-button type="primary" @click="handleEdit(props.row)" v-permission="['edit']">编辑</el-button>
+              <el-button type="danger" :disabled="info.identity != 99&&props.row.id >=1 && props.row.id <= 19" @click="handleDelete(props.row)" v-permission="['delete']">删除</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -216,11 +216,8 @@ export default {
             }
           });
         })
-        .catch(() => {
-          this.$message({
-            type: 'info',
-            message: '已取消删除',
-          });
+        .catch((err) => {
+          this.$message.error('删除失败! ' + err);
         });
     },
     // 编辑按钮触发

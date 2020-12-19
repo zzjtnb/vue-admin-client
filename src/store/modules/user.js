@@ -85,9 +85,9 @@ const actions = {
           hidden: true
         })
         commit('SET_MENU', menus) //把name 保存到vuex中
-        resolve()
+        resolve(true)
       }).catch(error => {
-        reject(error)
+        reject(false)
       })
     })
   },

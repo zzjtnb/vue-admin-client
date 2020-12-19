@@ -1,61 +1,15 @@
-
-import request from '@/utils/request'
-
-
-//   获取路由表接口
-export function getMoveRouter() {
-  return request({
-    url: '/role/getMoveRouter',
-    method: 'get',
-  })
-}
+// 导入接口域名列表
+import { localhost } from './base';
+// 每个模块都应该有自己的接口文件去统一管理api
+import { GET, POST, PUT, PATCH, DELETE } from '@/utils/request'
 
 
-// 获取权限列表
-export function getRolesList(params) {
-  return request({
-    url: `/role/roleList`,
-    method: 'get',
-    params
-  })
-}
+export const getAllRouter = () => GET(`${localhost}/role/getAllRouter`); //获取分配权限弹窗内所需全部路由菜单数据
+export const getMoveRouter = () => GET(`${localhost}/role/getMoveRouter`); //获取路由表接口
+export const getRolesList = (params) => GET(`${localhost}/role/roleList`, params); //获取权限列表
+export const authorize = (id, data) => POST(`${localhost}/role/authorize/${id}`, data);// 分配权限
+export const addRoles = (data) => POST(`${localhost}/role/add`, data);//新增权限
+export const editRoles = (id, data) => PUT(`${localhost}/role/edit/${id}`, data);//编辑权限
+export const deleteRoles = (id, data) => DELETE(`${localhost}/role/delete/${id}`, data);//删除权限
 
-// 分配权限 /aoaoe/api/authorize/:id
-export function authorize(id, data) {
-  return request({
-    url: `/role/authorize/${id}`,
-    method: 'post',
-    data
-  })
-}
-// 获取分配权限弹窗内所需全部路由菜单数据 /aoaoe/api/getAllRouter
-export function getAllRouter() {
-  return request({
-    url: `/role/getAllRouter`,
-    method: 'get',
-  })
-}
-// 新增权限 /aoaoe/api/role/add
-export function addRoles(data) {
-  return request({
-    url: `/role/add`,
-    method: 'post',
-    data
-  })
-}
-//编辑权限
-export function editRoles(data, id) {
-  return request({
-    url: `/role/edit/${id}`,
-    method: 'put',
-    data
-  })
-}
-// 删除权限 /role/delete/:id
-export function deleteRoles(id, data) {
-  return request({
-    url: `/role/delete/${id}`,
-    method: 'delete',
-    data
-  })
-}
+

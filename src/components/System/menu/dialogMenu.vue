@@ -140,7 +140,6 @@ export default {
   methods: {
     // 弹窗打开触发的方法
     openFun() {
-      console.log();
       getMoveRouter().then((res) => {
         if (this.formData.type == 1) {
           res.data.push({ id: 0, title: '顶级目录' });
@@ -149,22 +148,23 @@ export default {
             if (!item.title && this.menus[index].children) item.title = this.menus[index].children[0].title;
           });
         }
+        // console.log(this.allMenu);
         this.allMenu = res.data;
         if (this.dialogMenu.option == 'add') {
           this.$refs.form.resetFields();
         } else {
-          if (this.formData.type == 2) {
-            //同级不能绑定上下级关系
-            res.data.forEach((item, index) => {
-              item.id = '' + item.id;
-              if (!item.title && this.menus[index].children) item.title = this.menus[index].children[0].title;
-              if (item.children) {
+          //同级不能绑定上下级关系
+          res.data.forEach((item, index) => {
+            item.id = '' + item.id;
+            if (!item.title && this.menus[index].children) item.title = this.menus[index].children[0].title;
+            if (item.children) {
+              if (this.formData.type == 2) {
                 item.children.forEach((ele) => {
                   ele.disabled = true;
                 });
               }
-            });
-          }
+            }
+          });
         }
       });
     },

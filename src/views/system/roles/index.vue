@@ -23,13 +23,13 @@
           </el-table-column>
           <el-table-column label="操作" align="center">
             <template slot-scope="scope">
-              <el-button type="success" :disabled="info.identity != 99&&scope.row.id >=1 && scope.row.id <= 3" @click.native.prevent="setPermissions(scope.row)">
+              <el-button type="success" :disabled="info.identity != 99&&scope.row.id >=1 && scope.row.id <= 3" @click.native.prevent="setPermissions(scope.row)" v-permission="['authorize']">
                 分配权限
               </el-button>
-              <el-button type="warning" :disabled="info.identity != 99&&scope.row.id >=1 && scope.row.id <= 3" @click.native.prevent="showEditDialog(scope.row)">
+              <el-button type="warning" :disabled="info.identity != 99&&scope.row.id >=1 && scope.row.id <= 3" @click.native.prevent="showEditDialog(scope.row)" v-permission="['edit']">
                 编辑
               </el-button>
-              <el-button type="danger" :disabled="info.identity != 99&&scope.row.id >=1 && scope.row.id <= 3" @click.native.prevent="handleDel(scope.row)">
+              <el-button type="danger" :disabled="info.identity != 99&&scope.row.id >=1 && scope.row.id <= 3" @click.native.prevent="handleDel(scope.row)" v-permission="['delete']">
                 删除
               </el-button>
             </template>
@@ -111,8 +111,7 @@ export default {
       };
     },
     editRoles() {
-      console.log(this.formData);
-      editRoles(this.formData, this.formData.id).then((res) => {
+      editRoles(this.formData.id, this.formData).then((res) => {
         this.rolesDialog.show = false;
         this.$notify({
           title: '成功',
