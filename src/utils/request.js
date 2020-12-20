@@ -17,7 +17,8 @@ let httpCode = {
   500: '内部服务器错误',
   501: '服务器不支持该请求中使用的方法',
   502: '网关错误',
-  504: '网关超时'
+  504: '网关超时',
+  505: 'token已过期'
 }
 // 创建一个axios的自定义的实例service，并且可以自定义其配置
 const service = axios.create({
@@ -89,13 +90,13 @@ service.interceptors.response.use(response => {
       message: tips,
       type: 'error'
     })
-    // token或者登陆失效情况下跳转到登录页面，根据实际情况，在这里可以根据不同的响应错误结果，做对应的事。这里我以401判断为例
-    // if (error.response.status === 401) {
-    //   loadingInstance.close()
-    //   router.replace({
-    //     path: '/login',
-    //   })
-    // }
+    // token或者登陆失效情况下跳转到登录页面，根据实际情况，在这里可以根据不同的响应错误结果，做对应的事。这里我以505判断为例
+    if (error.response.status === 505) {
+      loadingInstance.close()
+      router.replace({
+        path: '/login',
+      })
+    }
     return Promise.reject(error)
   } else {
     Message({

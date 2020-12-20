@@ -131,7 +131,7 @@ export default {
         sort: [{ required: true, message: '请输入排序编号', trigger: 'blur' }],
         path: [{ required: true, message: '请输入组件路径', trigger: 'blur' }],
         pid: [{ required: true, message: '请选择上级类目', trigger: 'change' }],
-        component: [{ required: true, message: '请输入组件路径', trigger: 'blur' }],
+        // component: [{ required: true, message: '请输入组件路径', trigger: 'blur' }],
         permissions: [{ required: true, message: '请输入权限标识', trigger: 'blur' }],
       },
     };
