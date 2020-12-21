@@ -67,7 +67,7 @@
 
           <el-table-column prop="date" label="创建日期" align="center">
             <template slot-scope="props">
-              {{ props.row.date | formatDate }}
+              {{ props.row.createdAt | formatDate }}
             </template>
           </el-table-column>
           <el-table-column label="操作" width="150" align="center">

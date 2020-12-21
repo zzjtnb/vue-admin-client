@@ -46,10 +46,7 @@ router.beforeEach(async (to, from, next) => {
             //正常走
             // next()
             // 确保路由完整性,.如果 addRoutes并未完成,路由守卫会一层一层的执行执行,直到 addRoutes完成,找到对应的路由
-            next({
-              ...to,
-              replace: true//设置replace为true这样导航就不会留下历史记录
-            })
+            next({ ...to, replace: true })//设置replace为true这样导航就不会留下历史记录
           } catch (error) {
             await store.dispatch('user/resetToken') //删除token并进入登录页面重新登录
             // Message.error(error || 'Has Error') //弹出异常

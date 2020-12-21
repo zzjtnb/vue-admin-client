@@ -19,7 +19,12 @@
 
           <el-table-column prop="date" label="创建时间" align="center">
             <template slot-scope="scope">
-              {{scope.row.date | formatDate}}
+              {{scope.row.createdAt | formatDate}}
+            </template>
+          </el-table-column>
+          <el-table-column prop="date" label="登录时间" align="center">
+            <template slot-scope="scope">
+              {{scope.row.updatedAt | formatDate}}
             </template>
           </el-table-column>
           <el-table-column label="操作" align="center">
