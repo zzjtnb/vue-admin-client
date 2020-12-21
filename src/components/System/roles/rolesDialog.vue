@@ -6,24 +6,27 @@
           <el-input v-model="formData.title" placeholder="权限名称" style="width:90%;" />
         </el-form-item>
         <el-form-item label="权限级别" prop="roleType">
-          <el-input-number v-model="formData.roleType" :min="4" placeholder="权限级别" style="width:80%;" />
+          <el-input-number v-model="formData.roleType" :min="formData.identity==99?1:4" placeholder="权限级别" style="width:80%;" />
         </el-form-item>
       </el-form>
-
       <span slot="footer" class="dialog-footer">
+        <el-button @click="preview=!preview">预览提交参数</el-button>
         <el-button @click="rolesDialog.show = false">取 消</el-button>
         <el-button type="primary" v-if="rolesDialog.option == 'add'" @click="addRoles('form')">确 定</el-button>
         <el-button type="primary" v-if="rolesDialog.option == 'edit'" @click="editRoles('form')">确 定</el-button>
       </span>
+      <PreviewCode :preview='preview' :formData='formData' />
     </el-dialog>
   </div>
 </template>
 
 <script>
+import PreviewCode from '@/components/Common/previewCode';
 export default {
   props: ['rolesDialog', 'formData'],
   data() {
     return {
+      preview: false,
       rules: {
         title: [{ required: true, message: '请输入权限名称', trigger: 'blur' }],
         roleType: [{ required: true, message: '请输入权限级别', trigger: 'blur' }],
@@ -53,6 +56,9 @@ export default {
         }
       });
     },
+  },
+  components: {
+    PreviewCode,
   },
 };
 </script>

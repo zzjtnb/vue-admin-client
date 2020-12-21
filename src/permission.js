@@ -53,7 +53,7 @@ router.beforeEach(async (to, from, next) => {
           } catch (error) {
             await store.dispatch('user/resetToken') //删除token并进入登录页面重新登录
             // Message.error(error || 'Has Error') //弹出异常
-            Message({ message: error, type: 'error' })
+            // Message({ message: error, type: 'error' })
             next(`/login?redirect=${to.path}`) //然后就执行这里 跳转到 login,redirect把从哪个页面出错的
             NProgress.done()
           }

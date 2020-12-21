@@ -18,7 +18,12 @@
           </el-table-column>
           <el-table-column prop="date" label="创建时间" align="center">
             <template slot-scope="scope">
-              {{scope.row.date | formatDate}}
+              {{scope.row.createdAt | formatDate}}
+            </template>
+          </el-table-column>
+          <el-table-column prop="date" label="更新时间" align="center">
+            <template slot-scope="scope">
+              {{scope.row.updatedAt | formatDate}}
             </template>
           </el-table-column>
           <el-table-column label="操作" align="center">
@@ -108,6 +113,7 @@ export default {
         id: row.id,
         title: row.title,
         roleType: row.roleType,
+        identity: this.info.identity,
       };
     },
     editRoles() {
