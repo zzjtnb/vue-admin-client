@@ -3,8 +3,10 @@
     <el-card>
       <Toobar :AddBtnAuth="AddBtnAuth" @handleAdd='handleAdd'></Toobar>
       <el-card style="margin-top: 10px">
-        <el-table ref="table" :data="tableData" style="width: 100%" row-key="id" lazy :load="getChildMenus" :tree-props="{children: 'children', hasChildren: 'hasChildren'}">
-          <el-table-column type="index" label="#" width="55"> </el-table-column>
+        <el-table ref="table" :data="tableData" style="width: 100%" row-key="id" lazy :load="getChildMenus" :tree-props="{children: 'children', hasChildren: 'hasChildren'}" @selection-change="selsChange">
+          <el-table-column type="selection">
+          </el-table-column>
+          <!-- <el-table-column type="index" label="#"> </el-table-column> -->
           <el-table-column prop="title" label="菜单标题"> </el-table-column>
           <el-table-column prop="icon" label="图标" align="center" width="50">
             <template slot-scope="props">
@@ -77,6 +79,15 @@
             </template>
           </el-table-column>
         </el-table>
+
+        <!--工具条-->
+        <el-col :span="24" class="toolbar">
+          <el-button type="primary" @click="handleAllSelect(tableData)">全选</el-button>
+          <el-button type="danger" @click="batDel" :disabled="this.sels.length===0">批量删除</el-button>
+          <el-pagination layout="total, sizes, prev, pager, next" @size-change="handleSizeChange" @current-change="handleCurrentChange" :page-sizes="[10, 20, 50, 100]" :page-size="pageSize" :total="total" style="float:right;">
+          </el-pagination>
+        </el-col>
+
       </el-card>
     </el-card>
     <DialogMenu :dialogMenu=' dialogMenu' :formData='formData' @handleSubmit='handleSubmit' @handleSubmitEdit='handleSubmitEdit'>
@@ -92,6 +103,11 @@ import DialogMenu from '@/components/System/menu/dialogMenu.vue';
 export default {
   data() {
     return {
+      total: 0,
+      page: 1,
+      pageSize: 20,
+      sels: [], //列表选中列
+      keys: [],
       AddBtnAuth: ['add'],
       tableData: [],
       dialogMenu: {
@@ -105,6 +121,62 @@ export default {
     ...mapGetters(['menus', 'info']),
   },
   methods: {
+    //选中变化
+    selsChange: function (sels) {
+      this.sels = sels;
+    },
+    //页变化
+    handleCurrentChange(val) {
+      this.page = val;
+      this.getKeys();
+    },
+    //页大小变化
+    handleSizeChange(val) {
+      this.pageSize = val;
+      this.getKeys();
+    },
+    //全选
+    handleAllSelect: function (rows) {
+      if (rows) {
+        rows.forEach((row) => {
+          this.$refs.table.toggleRowSelection(row);
+        });
+      } else {
+        this.$refs.table.clearSelection();
+      }
+    },
+    //批量删除
+    batDel: function () {
+      var ids = this.sels.map((item) => item.id).toString();
+      console.log(ids);
+      return;
+      this.$confirm('确认删除选中记录吗？', '提示', {
+        type: 'warning',
+      })
+        .then(() => {
+          this.listLoading = true;
+          let para = { ids: ids };
+          batDelKey(para).then((res) => {
+            this.listLoading = false;
+            let msg = res.data.msg;
+            let code = res.data.code;
+            if (code !== 200) {
+              this.$message({
+                message: msg,
+                type: 'error',
+              });
+            } else {
+              this.$message({
+                message: '删除成功',
+                type: 'success',
+              });
+              this.getKeys();
+            }
+          });
+        })
+        .catch(() => {});
+    },
+
     //是否多服务数据处理
     changeType(row, column) {
       return row.hidden == 1 ? '是' : '否';
