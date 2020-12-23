@@ -80,6 +80,10 @@ router.afterEach(() => {
 //遍历后台传来的路由字符串，转换为组件对象
 function filterAsyncRouter(asyncRouterMap) {
   const accessedRouters = asyncRouterMap.filter(route => {
+    if (route.path.match('/embed')) {
+      route.url = route.redirect
+      route.redirect = null
+    }
     if (route.component) {
       route.component = route.component === 'Layout' ? Layout : _import(route.component)
     }

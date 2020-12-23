@@ -38,11 +38,12 @@
           <el-form-item label="组件名称" prop="name">
             <el-input placeholder="示例:menu" v-model="formData.name"></el-input>
           </el-form-item>
-          <el-form-item label="重定向" prop="redirect" v-if="nestedRouting==1&&formData.type==1">
-            <el-input placeholder="示例:/system/index" v-model="formData.redirect"></el-input>
-          </el-form-item>
+
           <el-form-item :label="formData.type==1?'菜单标题':'子菜单标题'" style="margin-left:1rem;" prop="title" :label-width="formData.type==1?'5rem':'6rem'">
             <el-input placeholder="请输入标题" v-model="formData.title"></el-input>
+          </el-form-item>
+          <el-form-item label="重定向" prop="redirect">
+            <el-input placeholder="示例:/system/index" v-model="formData.redirect"></el-input>
           </el-form-item>
         </div>
         <!-- 组件名称 、组件路径 -->
@@ -52,15 +53,17 @@
               <el-input :placeholder="formData.type==1?'示例:/system':'示例:system/menu'" v-model="formData.path"></el-input>
             </el-form-item>
           </el-col>
-          <el-form-item label="嵌套路由" v-if="formData.type==1" style="margin-left:1rem;">
-            <el-radio-group v-model=" nestedRouting">
-              <el-radio-button :label="1">是</el-radio-button>
-              <el-radio-button :label="0">否</el-radio-button>
-            </el-radio-group>
-          </el-form-item>
           <el-col :span="10" v-if="formData.type==2">
             <el-form-item label="组件路径" style="margin-left:1rem;" prop="component">
               <el-input placeholder="示例:system/menu/index" v-model="formData.component"></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="10">
+            <el-form-item label="嵌套路由" style="margin-left:1rem;">
+              <el-radio-group v-model=" nestedRouting">
+                <el-radio-button :label="1">是</el-radio-button>
+                <el-radio-button :label="0">否</el-radio-button>
+              </el-radio-group>
             </el-form-item>
           </el-col>
         </div>

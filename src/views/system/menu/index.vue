@@ -62,7 +62,7 @@
               </el-tooltip>
             </template>
             <template slot-scope="props">
-              <el-switch v-model="props.row.alwaysShow" disabled :active-value="1" active-text="是" :inactive-value="0" inactive-text="否" v-if="props.row.type == 1">
+              <el-switch v-model="props.row.alwaysShow" disabled :active-value="1" active-text="是" :inactive-value="0" inactive-text="否">
               </el-switch>
             </template>
           </el-table-column>
