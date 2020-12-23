@@ -9,7 +9,7 @@ export default {
     src: {
       type: String,
       required: false,
-      default: 'https://d2.pub/zh/doc/admin',
+      default: 'https://www.zzjtnb.com',
     },
   },
 };

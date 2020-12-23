@@ -10,10 +10,66 @@
             <el-radio-button :label="3" :disabled="formData.type != 3 && dialogMenu.option == 'edit'">按钮</el-radio-button>
           </el-radio-group>
         </el-form-item>
-        <!-- 选择图标 -->
-        <el-form-item label="选择图标" v-if="formData.type != 3" prop="icon">
-          <e-icon-picker v-model="formData.icon" :options="options" style="width:76%;" />
-        </el-form-item>
+        <div class="flex" v-if="formData.type != 3">
+
+          <el-col :span="20">
+            <!-- 选择图标 -->
+            <el-form-item label="选择图标" prop="icon">
+              <e-icon-picker v-model="formData.icon" :options="options" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="10">
+            <el-form-item label="上级类目" prop="pid">
+              <el-cascader :options="allMenu" v-model="formData.pid" :show-all-levels='false' :props="{ checkStrictly: true,label:'title',value:'id' }" placeholder="请选择菜单层级" size='mini' filterable clearable>
+              </el-cascader>
+            </el-form-item>
+          </el-col>
+        </div>
+        <!-- 路由地址和菜单排序 -->
+        <div class="flex" v-if="formData.type != 3">
+          <el-form-item label="组件名称" prop="name">
+            <el-input placeholder="示例:menu" v-model="formData.name"></el-input>
+          </el-form-item>
+
+          <el-form-item :label="formData.type==1?'菜单标题':'子菜单标题'" prop="title" :label-width="formData.type==1?'5rem':'6rem'">
+            <el-input placeholder="请输入标题" v-model="formData.title"></el-input>
+          </el-form-item>
+
+          <el-form-item label="组件路径" prop="component">
+            <el-input placeholder="示例:system/menu/index" v-model="formData.component"></el-input>
+          </el-form-item>
+
+        </div>
+        <!-- 路由地址-->
+        <div class="flex" v-if="formData.type != 3">
+          <el-col :span="10">
+            <el-form-item label="路由地址" prop="path">
+              <el-input :placeholder="formData.type==1?'示例:/system':'示例:system/menu'" v-model="formData.path"></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="10">
+            <el-form-item label="高亮路由" prop="activeMenu">
+              <el-input :placeholder="formData.type==1?'示例:/system':'示例:system/menu'" v-model="formData.activeMenu"></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="10">
+            <el-form-item label="重定向" prop="redirect">
+              <el-input placeholder="示例:/system/index" v-model="formData.redirect"></el-input>
+            </el-form-item>
+          </el-col>
+        </div>
+        <!-- 按钮名称、权限标识 -->
+        <div class="flex" v-if="formData.type == 3">
+          <el-form-item label="按钮名称" prop="title">
+            <el-input placeholder="示例:新增" v-model="formData.title"></el-input>
+          </el-form-item>
+          <el-form-item label="权限标识" prop="permissions">
+            <el-input placeholder="示例:add" v-model="formData.permissions"></el-input>
+          </el-form-item>
+          <el-form-item label="按钮排序" prop="sort" v-if='formData.type == 3'>
+            <el-input-number placeholder="数字小靠前" controls-position="right" v-model="formData.sort"></el-input-number>
+          </el-form-item>
+        </div>
         <!-- 菜单可见 ，菜单标题 -->
         <div class="flex" v-if="formData.type != 3">
           <el-form-item label="侧边栏隐藏" label-width="90px">
@@ -33,68 +89,34 @@
           </el-form-item>
 
         </div>
-        <!-- 路由地址和菜单排序 -->
-        <div class="flex" v-if="formData.type != 3">
-          <el-form-item label="组件名称" prop="name">
-            <el-input placeholder="示例:menu" v-model="formData.name"></el-input>
+        <!-- 底部选择 -->
+        <div class="flex foot" v-if="formData.type!=3">
+          <el-form-item label="嵌套路由">
+            <el-radio-group v-model=" nestedRouting">
+              <el-radio-button :label="1">是</el-radio-button>
+              <el-radio-button :label="0">否</el-radio-button>
+            </el-radio-group>
           </el-form-item>
-
-          <el-form-item :label="formData.type==1?'菜单标题':'子菜单标题'" style="margin-left:1rem;" prop="title" :label-width="formData.type==1?'5rem':'6rem'">
-            <el-input placeholder="请输入标题" v-model="formData.title"></el-input>
-          </el-form-item>
-          <el-form-item label="重定向" prop="redirect">
-            <el-input placeholder="示例:/system/index" v-model="formData.redirect"></el-input>
-          </el-form-item>
-        </div>
-        <!-- 组件名称 、组件路径 -->
-        <div class="flex" v-if="formData.type != 3">
-          <el-col :span="8">
-            <el-form-item label="路由地址" prop="path">
-              <el-input :placeholder="formData.type==1?'示例:/system':'示例:system/menu'" v-model="formData.path"></el-input>
-            </el-form-item>
-          </el-col>
-          <el-col :span="10" v-if="formData.type==2">
-            <el-form-item label="组件路径" style="margin-left:1rem;" prop="component">
-              <el-input placeholder="示例:system/menu/index" v-model="formData.component"></el-input>
-            </el-form-item>
-          </el-col>
-          <el-col :span="10">
-            <el-form-item label="嵌套路由" style="margin-left:1rem;">
-              <el-radio-group v-model=" nestedRouting">
-                <el-radio-button :label="1">是</el-radio-button>
-                <el-radio-button :label="0">否</el-radio-button>
-              </el-radio-group>
-            </el-form-item>
-          </el-col>
-        </div>
-        <!-- 按钮名称、权限标识 -->
-        <div class="flex" v-if="formData.type == 3">
-          <el-form-item label="按钮名称" prop="title">
-            <el-input placeholder="示例:新增" v-model="formData.title"></el-input>
-          </el-form-item>
-          <el-form-item label="权限标识" style="margin-left:1rem;" prop="permissions">
-            <el-input placeholder="示例:add" v-model="formData.permissions"></el-input>
-          </el-form-item>
-        </div>
-        <!-- 上级类目 -->
-        <div class="flex">
-          <el-col :span="8">
-            <el-form-item label="上级类目" prop="pid">
-              <el-cascader :options="allMenu" v-model="formData.pid" :show-all-levels='false' :props="{ checkStrictly: true,label:'title',value:'id' }" placeholder="请选择菜单层级" size='mini' filterable clearable>
-
-              </el-cascader>
-            </el-form-item>
-          </el-col>
-          <el-form-item label="始终可见" v-if="formData.type!=3" style="margin-left:1rem;">
+          <el-form-item label="始终可见">
             <el-radio-group v-model="formData.alwaysShow">
               <el-radio-button :label="1">是</el-radio-button>
               <el-radio-button :label="0">否</el-radio-button>
             </el-radio-group>
           </el-form-item>
-          <el-form-item label="按钮排序" prop="sort" style="margin-left:1rem;" v-if='formData.type == 3'>
-            <el-input-number placeholder="数字小靠前" controls-position="right" v-model="formData.sort"></el-input-number>
+          <el-form-item label="启用缓存">
+            <el-radio-group v-model="formData.noCache">
+              <el-radio-button :label="1">是</el-radio-button>
+              <el-radio-button :label="0">否</el-radio-button>
+            </el-radio-group>
+          </el-form-item>
+          <el-form-item label="导航标签">
+            <el-radio-group v-model="formData.affix">
+              <el-radio-button :label="1">是</el-radio-button>
+              <el-radio-button :label="0">否</el-radio-button>
+            </el-radio-group>
           </el-form-item>
         </div>
+
       </el-form>
       <span slot="footer" class="dialog-footer">
         <el-button @click="preview=!preview">预览提交参数</el-button>
@@ -236,5 +258,8 @@ export default {
 }
 .justifysa {
   justify-content: space-around;
+}
+.foot ::v-deep .el-form-item {
+  margin: 0 0.2rem;
 }
 </style>

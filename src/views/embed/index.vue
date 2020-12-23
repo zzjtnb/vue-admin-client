@@ -1,23 +1,21 @@
-<template>
-  <!-- <container-frame src="https://d2.pub/zh/doc/d2-admin" /> -->
-  <div>
-
-    {{'url:'+this.$route.params.url}}
-  </div>
-
+ <template>
+  <container-frame :src="this.$route.query.url" />
 </template>
 
 
 <script>
+import containerFrame from '@/components/containerFrame';
 export default {
   data() {
     return {};
   },
   mounted() {
-    // console.log(this.$route);
+    // console.log(this.$route.query);
   },
   methods: {},
-  components: {},
+  components: {
+    containerFrame: containerFrame,
+  },
 };
 </script>
 

@@ -6,36 +6,41 @@
         <el-table ref="table" :data="tableData" style="width: 100%" row-key="id" lazy :load="getChildMenus" :tree-props="{children: 'children', hasChildren: 'hasChildren'}" @selection-change="selsChange">
           <el-table-column type="selection">
           </el-table-column>
-          <!-- <el-table-column type="index" label="#"> </el-table-column> -->
-          <el-table-column prop="title" label="菜单标题"> </el-table-column>
-          <el-table-column prop="icon" label="图标" align="center" width="50">
+          <!-- <el-table-column type="index" label="#" width="20"> </el-table-column> -->
+          <el-table-column prop="title" label="菜单标题" width="120"> </el-table-column>
+          <el-table-column prop="icon" label="图标" align="center" width="45">
             <template slot-scope="props">
               <e-icon :icon-name="props.row.icon" v-if="props.row.icon" />
-              <span v-else>-</span>
             </template>
           </el-table-column>
-          <el-table-column prop="sort" label="排序" align="center"> </el-table-column>
-          <el-table-column prop="path" label="路由" align="center">
+          <el-table-column prop="sort" label="排序" align="center" width="45"> </el-table-column>
+          <el-table-column prop="path" label="路由" align="center" width="140">
             <template slot-scope="props">
               <span>{{props.row.path}}</span>
             </template>
           </el-table-column>
-          <el-table-column prop="component" label="组件路径" align="center">
+          <el-table-column prop="component" label="组件路径" align="center" width="140">
             <template slot-scope="props">
               <span v-if="props.row.component == 'Layout'">--</span>
               <span v-else>{{ props.row.component== undefined ? '--' : props.row.component }}</span>
             </template>
           </el-table-column>
-          <el-table-column prop="permissions" label="权限标识" align="center">
+          <el-table-column prop="permissions" label="权限" align="center" width="54">
             <template slot-scope="props">
-              {{ props.row.permissions == '' ? '--' : props.row.permissions }}
+              {{ props.row.permissions == null ? '--' : props.row.permissions }}
             </template>
           </el-table-column>
-          <el-table-column prop="redirect" label="重定向" align="center">
+          <el-table-column prop="redirect" label="重定向" align="center" width="120">
             <template slot-scope="props">
-              <span>{{props.row.redirect}}</span>
+              <span>{{props.row.redirect==null ? '--' :props.row.redirect}}</span>
             </template>
           </el-table-column>
+          <el-table-column prop="activeMenu" label="高亮路由" align="center">
+            <template slot-scope="props">
+              <span>{{props.row.activeMenu== null ? '--' : props.row.activeMenu }}</span>
+            </template>
+          </el-table-column>
+
           <el-table-column prop="type" label="菜单类型" align="center" width="80">
             <template slot-scope="props">
               <el-tag type="success" v-if="props.row.type == 1">菜单</el-tag>
@@ -43,15 +48,15 @@
               <el-tag type="danger" v-if="props.row.type == 3">按钮</el-tag>
             </template>
           </el-table-column>
-          <el-table-column prop="hidden" label="侧边栏隐藏" align="center" :formatter='changeType'>
+          <el-table-column prop="noCache" label="启用缓存" align="center" :formatter='changeType'>
             <template slot-scope="props">
-              <el-switch v-model="props.row.hidden" disabled :active-value="1" active-text="是" :inactive-value="0" inactive-text="否">
+              <el-switch v-model="props.row.noCache" disabled :active-value="1" active-text="是" :inactive-value="0" inactive-text="否">
               </el-switch>
             </template>
           </el-table-column>
-          <el-table-column prop="breadcrumb" label="面包屑中显示" align="center">
+          <el-table-column prop="affix" label="导航标签" align="center" :formatter='changeType'>
             <template slot-scope="props">
-              <el-switch v-model="props.row.breadcrumb" disabled :active-value="1" active-text="是" :inactive-value="0" inactive-text="否">
+              <el-switch v-model="props.row.affix" disabled :active-value="1" active-text="是" :inactive-value="0" inactive-text="否">
               </el-switch>
             </template>
           </el-table-column>
@@ -67,7 +72,20 @@
             </template>
           </el-table-column>
 
-          <el-table-column prop="date" label="创建日期" align="center">
+          <el-table-column prop="hidden" label="侧边栏隐藏" align="center" :formatter='changeType'>
+            <template slot-scope="props">
+              <el-switch v-model="props.row.hidden" disabled :active-value="1" active-text="是" :inactive-value="0" inactive-text="否">
+              </el-switch>
+            </template>
+          </el-table-column>
+          <el-table-column prop="breadcrumb" label="面包屑隐藏" align="center">
+            <template slot-scope="props">
+              <el-switch v-model="props.row.breadcrumb" disabled :active-value="0" active-text="是" :inactive-value="1" inactive-text="否">
+              </el-switch>
+            </template>
+          </el-table-column>
+
+          <el-table-column prop="date" label="创建日期" align="center" width="120">
             <template slot-scope="props">
               {{ props.row.createdAt | formatDate }}
             </template>
@@ -218,6 +236,8 @@ export default {
         hidden: 0,
         breadcrumb: 1,
         alwaysShow: 0,
+        noCache: 0,
+        affix: 0,
       };
     },
     //提交新增请求
@@ -299,23 +319,9 @@ export default {
         title: '修改菜单',
         option: 'edit',
       };
-      this.formData = {
-        id: row.id,
-        type: row.type,
-        icon: row.icon,
-        title: row.title,
-        name: row.name,
-        path: row.path,
-        redirect: row.redirect,
-        component: row.component,
-        sort: row.sort,
-        pid: row.pid + '',
-        permissions: row.permissions,
-        hidden: row.hidden,
-        breadcrumb: row.breadcrumb,
-        alwaysShow: row.alwaysShow,
-      };
       this.oldPid = row.pid;
+      row.pid = row.pid + '';
+      this.formData = row;
     },
   },
   mounted() {
