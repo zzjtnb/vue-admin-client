@@ -108,7 +108,7 @@ const actions = {
   // remove token
   resetToken({ commit }) {
     return new Promise(resolve => {
-      removeToken() // must remove  token  first //清楚token
+      removeToken() // must remove  token  first //清除token
       commit('RESET_STATE')
       resolve()
     })

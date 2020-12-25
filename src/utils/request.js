@@ -2,6 +2,9 @@ import axios from 'axios'
 import store from '@/store'
 import { getToken } from '@/utils/auth'
 import { Loading, MessageBox, Message } from 'element-ui'
+import { removeToken } from '@/utils/auth'
+import { resetRouter } from '@/router'
+import router from '@/router'
 /**
  * 加载全局的loading
  */
@@ -70,17 +73,14 @@ service.interceptors.response.use(response => {
   //在这里对返回的数据进行处理
   const res = response.data
   if (res.code !== 200) {
-    Message({
-      message: res.message || 'Error',
-      type: 'error',
-      duration: 5 * 1000
-    })
+    Message({ message: res.message || 'Error', type: 'error', duration: 5 * 1000 })
     return Promise.reject(new Error(res.message || 'Error'))
   } else {
     return Promise.resolve(res)
   }
 
 }, error => {
+  console.log(error.response);
   //出错，也要loading结束
   loadingInstance.close()
   if (error.response) {
@@ -90,14 +90,18 @@ service.interceptors.response.use(response => {
       message: tips,
       type: 'error'
     })
-    // token或者登陆失效情况下跳转到登录页面，根据实际情况，在这里可以根据不同的响应错误结果，做对应的事。这里我以505判断为例
-    if (error.response.status === 505) {
-      loadingInstance.close()
+    // token或者登陆失效情况下跳转到登录页面，根据实际情况，在这里可以根据不同的响应错误结果，做对应的事。这里我以401判断为例
+    if (error.response.status === 401) {
+      removeToken()
+      resetRouter()
+      // 跳转登录页面,并将要浏览的页面fullPath传过去.登录成功后跳转需要访问的页面
       router.replace({
         path: '/login',
+        query: {
+          redirect: router.currentRoute.fullPath
+        }
       })
     }
-
     return Promise.reject(error)
   } else {
     Message({
@@ -106,6 +110,7 @@ service.interceptors.response.use(response => {
     })
     return Promise.reject(new Error('请求超时, 请刷新重试'))
   }
+
 })
 /**
  * 统一封装GET请求
