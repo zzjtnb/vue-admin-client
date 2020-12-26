@@ -1,5 +1,5 @@
-import { localhost } from './base';
-import { GET, POST, PUT, PATCH, DELETE } from '@/utils/request'
+import { localhost } from '@/api/base';
+import { GET, POST, PUT, DELETE } from '@/utils/request'
 
 export const getMenuList = (params) => GET(`${localhost}/menu/getMenuList`, params)
 export const addMenu = (data) => POST(`${localhost}/menu/add`, data)

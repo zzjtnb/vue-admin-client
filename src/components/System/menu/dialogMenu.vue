@@ -10,9 +10,8 @@
             <el-radio-button :label="3" :disabled="formData.type != 3 && dialogMenu.option == 'edit'">按钮</el-radio-button>
           </el-radio-group>
         </el-form-item>
-        <div class="flex" v-if="formData.type != 3">
-
-          <el-col :span="20">
+        <div class="flex">
+          <el-col :span="20" v-if="formData.type != 3">
             <!-- 选择图标 -->
             <el-form-item label="选择图标" prop="icon">
               <e-icon-picker v-model="formData.icon" :options="options" />
