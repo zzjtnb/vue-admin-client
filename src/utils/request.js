@@ -80,7 +80,6 @@ service.interceptors.response.use(response => {
   }
 
 }, error => {
-  console.log(error.response);
   //出错，也要loading结束
   loadingInstance.close()
   if (error.response) {
